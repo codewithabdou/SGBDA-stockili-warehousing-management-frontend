@@ -10,11 +10,8 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
+import { Zone } from "@typings/entities";
 import { HiDotsHorizontal } from "react-icons/hi";
-export type Zone = {
-  id: string;
-  zoneName: string;
-};
 
 export const columns: ColumnDef<Zone>[] = [
   {
@@ -22,7 +19,7 @@ export const columns: ColumnDef<Zone>[] = [
     header: "ID",
   },
   {
-    accessorKey: "zoneName",
+    accessorKey: "name",
     header: "Name",
   },
   {
@@ -41,7 +38,7 @@ export const columns: ColumnDef<Zone>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(zone.id)}
+              onClick={() => navigator.clipboard.writeText(zone.id.toString())}
             >
               Copy Zone ID
             </DropdownMenuItem>

@@ -10,11 +10,8 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
+import { Provider } from "@typings/entities";
 import { HiDotsHorizontal } from "react-icons/hi";
-export type Provider = {
-  id: string;
-  providerName: string;
-};
 
 export const columns: ColumnDef<Provider>[] = [
   {
@@ -22,13 +19,21 @@ export const columns: ColumnDef<Provider>[] = [
     header: "ID",
   },
   {
-    accessorKey: "providerName",
+    accessorKey: "name",
     header: "Name",
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Created At",
+    cell: ({ row }) => {
+      const provider = row.original;
+      return new Date(provider.createdAt).toLocaleTimeString();
+    },
   },
   {
     header: "actions",
     cell: ({ row }) => {
-      const zone = row.original;
+      const provider = row.original;
 
       return (
         <DropdownMenu>
@@ -41,7 +46,9 @@ export const columns: ColumnDef<Provider>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(zone.id)}
+              onClick={() =>
+                navigator.clipboard.writeText(provider.id.toString())
+              }
             >
               Copy Provider ID
             </DropdownMenuItem>

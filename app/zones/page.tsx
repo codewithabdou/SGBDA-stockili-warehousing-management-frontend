@@ -2,7 +2,7 @@ import { CreateZone } from "@components/zones management/CreateZoneForm";
 import ZonesTable from "@components/zones management/data table/zones";
 import React from "react";
 
-const ZonesPages = () => {
+const ZonesPages = async () => {
   return (
     <div className="w-full">
       <div className="flex gap-6 flex-wrap justify-between items-center">

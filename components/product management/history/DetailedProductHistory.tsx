@@ -174,7 +174,7 @@ const DetailedProductHistory = () => {
         </div>
         <DialogFooter className="sm:justify-start">
           <DialogClose asChild>
-            <Button type="button" variant="secondary">
+            <Button type="button" variant="destructive">
               Close
             </Button>
           </DialogClose>

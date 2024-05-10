@@ -13,13 +13,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { HiDotsHorizontal } from "react-icons/hi";
 import DetailedProductHistory from "../history/DetailedProductHistory";
 import SummarizedProductHistory from "../history/SummarizedProductHistory";
-
-export type Product = {
-  id: string;
-  productName: string;
-  cost: number;
-  quantity: number;
-};
+import InboundForm from "../forms/InboundForm";
+import OutboundForm from "../forms/OutboundForm";
+import { Product } from "@typings/entities";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -53,13 +49,18 @@ export const columns: ColumnDef<Product>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(product.id)}
+              onClick={() =>
+                navigator.clipboard.writeText(product.id.toString())
+              }
             >
               Copy Product ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <SummarizedProductHistory />
             <DetailedProductHistory />
+            <DropdownMenuSeparator />
+            <InboundForm product={product} />
+            <OutboundForm product={product} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

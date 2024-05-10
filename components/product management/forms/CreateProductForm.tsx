@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -17,6 +16,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -26,18 +26,81 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@components/ui/select";
+import { Textarea } from "@components/ui/textarea";
+
+const floatRegex = /^(\d{1,8}(\.\d{0,2})?|100000000(\.00?)?)$/;
 
 const FormSchema = z.object({
-  product_name: z.string().min(3, {
+  productName: z.string().min(3, {
     message: "Product name must be at least 3 characters.",
   }),
+  providerId: z.string().min(3, {
+    message: "Provider must be selected.",
+  }),
+  cost: z
+    .string()
+    .min(3, {
+      message: "Cost is required.",
+    })
+    .regex(floatRegex, {
+      message: "Cost must be a number.",
+    }),
+  desciption: z.string().min(3, {
+    message: "Description is required.",
+  }),
+  height: z
+    .string()
+    .min(3, {
+      message: "Height is required.",
+    })
+    .regex(floatRegex, {
+      message: "Height must be a number.",
+    }),
+  width: z
+    .string()
+    .min(3, {
+      message: "Width is required.",
+    })
+    .regex(floatRegex, {
+      message: "Width must be a number.",
+    }),
+  length: z
+    .string()
+    .min(3, {
+      message: "Length is required.",
+    })
+    .regex(floatRegex, {
+      message: "Length must be a number.",
+    }),
+  weight: z
+    .string()
+    .min(3, {
+      message: "Weight is required.",
+    })
+    .regex(floatRegex, {
+      message: "Weight must be a number.",
+    }),
 });
 
 export function CreateProduct() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      product_name: "",
+      productName: "",
+      providerId: "",
+      cost: "",
+      desciption: "",
+      height: "",
+      width: "",
+      length: "",
+      weight: "",
     },
   });
 
@@ -58,7 +121,7 @@ export function CreateProduct() {
           Create New Product <IoMdAddCircleOutline className="ml-2" size={20} />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-xl rounded-sm w-[95%] custom-scrollbar  overflow-auto  h-[90vh]">
         <DialogHeader>
           <DialogTitle>Create new product</DialogTitle>
           <DialogDescription>
@@ -71,24 +134,133 @@ export function CreateProduct() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="w-full space-y-6"
           >
+            <div className="flex flex-col lg:flex-row gap-6 w-full">
+              <FormField
+                control={form.control}
+                name="productName"
+                render={({ field }) => (
+                  <FormItem className="w-full lg:w-1/2">
+                    <FormLabel>Product Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Product A" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="providerId"
+                render={({ field }) => (
+                  <FormItem className="w-full lg:w-1/2">
+                    <FormLabel className="text-white">Provider</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Provider A" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="1">Provider A</SelectItem>
+                        <SelectItem value="2">Provider B</SelectItem>
+                        <SelectItem value="3">Provider C</SelectItem>
+                        <SelectItem value="4">Provider D</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage className="text-secondary" />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
-              name="product_name"
+              name="cost"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Product Name</FormLabel>
+                  <FormLabel>Cost</FormLabel>
                   <FormControl>
-                    <Input placeholder="Product A" {...field} />
+                    <Input placeholder="100" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is the name of the product that will be created.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            <DialogFooter>
+            <div className="flex gap-6 flex-col lg:flex-row w-full">
+              <FormField
+                control={form.control}
+                name="height"
+                render={({ field }) => (
+                  <FormItem className="w-full lg:w-1/2">
+                    <FormLabel>Height</FormLabel>
+                    <FormControl>
+                      <Input placeholder="100" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="width"
+                render={({ field }) => (
+                  <FormItem className="w-full lg:w-1/2">
+                    <FormLabel>Width</FormLabel>
+                    <FormControl>
+                      <Input placeholder="100" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="length"
+                render={({ field }) => (
+                  <FormItem className="w-full lg:w-1/2">
+                    <FormLabel>Length</FormLabel>
+                    <FormControl>
+                      <Input placeholder="100" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="weight"
+                render={({ field }) => (
+                  <FormItem className="w-full lg:w-1/2">
+                    <FormLabel>Weight</FormLabel>
+                    <FormControl>
+                      <Input placeholder="100" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormField
+              control={form.control}
+              name="desciption"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Description" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <DialogFooter className="sm:justify-around gap-6">
+              <DialogClose asChild>
+                <Button type="button" variant="destructive">
+                  Close
+                </Button>
+              </DialogClose>
               <Button type="submit">Create product</Button>
             </DialogFooter>
           </form>

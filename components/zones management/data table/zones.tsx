@@ -1,33 +1,14 @@
+import getZones from "@api/getZones";
 import { Zone, columns } from "./columns";
 import { DataTable } from "./table";
 
-async function getData(): Promise<Zone[]> {
-  return [
-    {
-      id: "1",
-      zoneName: "Zone A",
-    },
-    {
-      id: "2",
-      zoneName: "Zone B",
-    },
-    {
-      id: "3",
-      zoneName: "Zone C",
-    },
-    {
-      id: "4",
-      zoneName: "Zone D",
-    },
-  ];
-}
-
 export default async function ZonesTable() {
-  const data = await getData();
+  const zones: Zone[] = await getZones();
+  console.log(zones);
 
   return (
     <div className="w-full py-10">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={zones} />
     </div>
   );
 }

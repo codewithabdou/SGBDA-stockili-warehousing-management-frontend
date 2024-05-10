@@ -17,6 +17,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -89,7 +90,12 @@ export function CreateProvider() {
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className="sm:justify-around gap-6">
+              <DialogClose asChild>
+                <Button type="button" variant="destructive">
+                  Close
+                </Button>
+              </DialogClose>
               <Button type="submit">Create provider</Button>
             </DialogFooter>
           </form>

@@ -1,41 +1,15 @@
-import { Product, columns } from "./columns";
+import { Product } from "@typings/entities";
+import { columns } from "./columns";
 import { DataTable } from "./table";
-
-async function getData(): Promise<Product[]> {
-  return [
-    {
-      id: "1",
-      productName: "Product A",
-      cost: 100,
-      quantity: 10,
-    },
-    {
-      id: "2",
-      productName: "Product B",
-      cost: 200,
-      quantity: 20,
-    },
-    {
-      id: "3",
-      productName: "Product C",
-      cost: 300,
-      quantity: 30,
-    },
-    {
-      id: "4",
-      productName: "Product D",
-      cost: 400,
-      quantity: 40,
-    },
-  ];
-}
+import getProducts from "@api/getProducts";
 
 export default async function ProductsTable() {
-  const data = await getData();
+  const products: Product[] = await getProducts();
+  console.log(products);
 
   return (
     <div className="w-full py-10">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={products} />
     </div>
   );
 }
