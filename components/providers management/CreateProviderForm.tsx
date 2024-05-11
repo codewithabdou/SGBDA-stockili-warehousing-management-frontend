@@ -27,30 +27,44 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { useState } from "react";
+import createProvider from "@api/createProvider";
 
 const FormSchema = z.object({
-  provider_name: z.string().min(3, {
+  providerName: z.string().min(3, {
     message: "Provider name must be at least 3 characters.",
   }),
 });
 
 export function CreateProvider() {
+  const [isSending, setIsSending] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      provider_name: "",
+      providerName: "",
     },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    setIsSending(true);
+    createProvider(data)
+      .then((response) => {
+        toast({
+          title: "Provider created successfully",
+          description: `The provider ${data.providerName} has been created successfully.`,
+        });
+        window.location.reload();
+        form.reset();
+      })
+      .catch((error) => {
+        toast({
+          title: "Error",
+          description: "An error occurred while creating the provider.",
+        });
+      })
+      .finally(() => {
+        setIsSending(false);
+      });
   }
   return (
     <Dialog>
@@ -75,7 +89,7 @@ export function CreateProvider() {
           >
             <FormField
               control={form.control}
-              name="provider_name"
+              name="providerName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Provider Name</FormLabel>
@@ -96,7 +110,15 @@ export function CreateProvider() {
                   Close
                 </Button>
               </DialogClose>
-              <Button type="submit">Create provider</Button>
+              <Button
+                disabled={isSending}
+                className={`${
+                  isSending ? "cursor-not-allowed bg-opacity-70" : ""
+                }`}
+                type="submit"
+              >
+                {isSending ? "Creating..." : "Create Provider"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

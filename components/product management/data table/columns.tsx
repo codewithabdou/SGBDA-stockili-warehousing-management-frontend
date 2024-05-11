@@ -23,7 +23,7 @@ export const columns: ColumnDef<Product>[] = [
     header: "ID",
   },
   {
-    accessorKey: "productName",
+    accessorKey: "name",
     header: "Name",
   },
   {

@@ -27,30 +27,45 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { create } from "domain";
+import createZone from "@api/createZone";
+import { useState } from "react";
 
 const FormSchema = z.object({
-  zone_name: z.string().min(3, {
+  zoneName: z.string().min(3, {
     message: "Zone name must be at least 3 characters.",
   }),
 });
 
 export function CreateZone() {
+  const [isSending, setIsSending] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      zone_name: "",
+      zoneName: "",
     },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    setIsSending(true);
+    createZone(data)
+      .then((response) => {
+        window.location.reload();
+        toast({
+          title: "Zone created successfully",
+          description: `The zone ${data.zoneName} has been created successfully.`,
+        });
+        form.reset();
+      })
+      .catch((error) => {
+        toast({
+          title: "Error",
+          description: "An error occurred while creating the zone.",
+        });
+      })
+      .finally(() => {
+        setIsSending(false);
+      });
   }
   return (
     <Dialog>
@@ -74,7 +89,7 @@ export function CreateZone() {
           >
             <FormField
               control={form.control}
-              name="zone_name"
+              name="zoneName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Zone Name</FormLabel>
@@ -94,7 +109,15 @@ export function CreateZone() {
                   Close
                 </Button>
               </DialogClose>
-              <Button type="submit">Create zone</Button>
+              <Button
+                disabled={isSending}
+                className={`${
+                  isSending ? "cursor-not-allowed bg-opacity-70" : ""
+                }`}
+                type="submit"
+              >
+                {isSending ? "Creating zone..." : "Create zone"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

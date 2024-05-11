@@ -1,10 +1,10 @@
 import getZones from "@api/getZones";
-import { Zone, columns } from "./columns";
+import { columns } from "./columns";
 import { DataTable } from "./table";
+import { Zone } from "@typings/entities";
 
 export default async function ZonesTable() {
   const zones: Zone[] = await getZones();
-  console.log(zones);
 
   return (
     <div className="w-full py-10">

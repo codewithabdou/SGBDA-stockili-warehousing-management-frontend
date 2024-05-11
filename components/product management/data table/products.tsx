@@ -5,7 +5,6 @@ import getProducts from "@api/getProducts";
 
 export default async function ProductsTable() {
   const products: Product[] = await getProducts();
-  console.log(products);
 
   return (
     <div className="w-full py-10">

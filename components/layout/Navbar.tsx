@@ -5,14 +5,22 @@ import { useState, useEffect } from "react";
 import { RiMenuFoldLine } from "react-icons/ri";
 import { ImCancelCircle } from "react-icons/im";
 import ThemeToggle from "@components/shared/Theme/ThemeToggle";
-import { Style_Script } from "next/font/google";
+import { Style_Script as fontSignature } from "next/font/google";
+import { cn } from "@lib/utils";
+import { usePathname } from "next/navigation";
 
-const signature = Style_Script({ subsets: ["latin"], weight: ["400"] });
+const signature = fontSignature({
+  variable: "--font-signature",
+  weight: "400",
+  style: "normal",
+  subsets: ["latin"],
+});
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [showDiv, setShowDiv] = useState(true);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,14 +63,20 @@ const Navbar = () => {
             className={`px-4 py-10 h-20   hidden items-center justify-around lg:flex w-full`}
           >
             <Link className={`w-[15%] text-4xl flex items-center   `} href="/">
-              <p className={signature.className}>Stockili.</p>
+              <p className={cn("font-signature ", signature.variable)}>
+                Livrili.
+              </p>
             </Link>
             <div className={`flex    items-center gap-10`}>
               <div className={`flex    items-center gap-10 `}>
                 {links.map((link, index) => (
                   <Link key={index} href={link.href}>
                     <p
-                      className={`primary-gradient font-medium after:bg-foreground `}
+                      className={`${
+                        pathname === link.href
+                          ? "after:bg-foreground after:absolute after:w-full relative after:h-[2px] after:left-0 after:top-full"
+                          : "font-medium transition-all duration-300 hover:text-[#6e6e6e]"
+                      }`}
                     >
                       {link.name}
                     </p>
@@ -80,7 +94,9 @@ const Navbar = () => {
               className={`w-1/2 text-4xl md:w-1/4 flex items-center   `}
               href="/"
             >
-              <p className={signature.className}>Stockili.</p>
+              <p className={cn("font-signature ", signature.variable)}>
+                Livrili.
+              </p>
             </Link>
             <div className={`flex  items-center gap-8`}>
               <ThemeToggle />
@@ -108,7 +124,15 @@ const Navbar = () => {
               >
                 {links.map((link, index) => (
                   <Link key={index} onClick={toggleMenu} href={link.href}>
-                    <p className={`primary-gradient w-fit`}>{link.name}</p>
+                    <p
+                      className={`${
+                        pathname === link.href
+                          ? "after:bg-foreground w-fit after:absolute after:w-full relative after:h-[2px] after:left-0 after:top-full"
+                          : "font-medium transition-all duration-300 hover:text-[#6e6e6e]"
+                      }`}
+                    >
+                      {link.name}
+                    </p>
                   </Link>
                 ))}
               </div>

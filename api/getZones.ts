@@ -8,11 +8,13 @@ async function getZones() {
       headers: {
         "Content-Type": "application/json",
       },
+      cache: "no-store",
     });
     const data = await response.json();
     return data.zones;
   } catch (error) {
     console.log(error);
+    return [];
   }
 }
 

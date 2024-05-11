@@ -34,6 +34,10 @@ import {
   SelectValue,
 } from "@components/ui/select";
 import { Textarea } from "@components/ui/textarea";
+import createProduct from "@api/createProduct";
+import { useEffect, useState } from "react";
+import getProviders from "@api/getProviders";
+import { Provider } from "@typings/entities";
 
 const floatRegex = /^(\d{1,8}(\.\d{0,2})?|100000000(\.00?)?)$/;
 
@@ -41,12 +45,15 @@ const FormSchema = z.object({
   productName: z.string().min(3, {
     message: "Product name must be at least 3 characters.",
   }),
-  providerId: z.string().min(3, {
+  providerId: z.string().min(1, {
     message: "Provider must be selected.",
+  }),
+  quantity: z.string().min(1, {
+    message: "Quantity is required.",
   }),
   cost: z
     .string()
-    .min(3, {
+    .min(1, {
       message: "Cost is required.",
     })
     .regex(floatRegex, {
@@ -57,7 +64,7 @@ const FormSchema = z.object({
   }),
   height: z
     .string()
-    .min(3, {
+    .min(1, {
       message: "Height is required.",
     })
     .regex(floatRegex, {
@@ -65,7 +72,7 @@ const FormSchema = z.object({
     }),
   width: z
     .string()
-    .min(3, {
+    .min(1, {
       message: "Width is required.",
     })
     .regex(floatRegex, {
@@ -73,7 +80,7 @@ const FormSchema = z.object({
     }),
   length: z
     .string()
-    .min(3, {
+    .min(1, {
       message: "Length is required.",
     })
     .regex(floatRegex, {
@@ -81,7 +88,7 @@ const FormSchema = z.object({
     }),
   weight: z
     .string()
-    .min(3, {
+    .min(1, {
       message: "Weight is required.",
     })
     .regex(floatRegex, {
@@ -90,12 +97,16 @@ const FormSchema = z.object({
 });
 
 export function CreateProduct() {
+  const [isSending, setIsSending] = useState(false);
+  const [providers, setProviders] = useState<Provider[]>([]);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       productName: "",
       providerId: "",
       cost: "",
+      quantity: "0",
       desciption: "",
       height: "",
       width: "",
@@ -104,16 +115,45 @@ export function CreateProduct() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+  useEffect(() => {
+    getProviders().then((data) => {
+      setProviders(data);
     });
+  }, []);
+
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    setIsSending(true);
+    const product = {
+      productName: data.productName,
+      providerId: parseInt(data.providerId),
+      cost: parseFloat(data.cost),
+      quantity: parseInt(data.quantity),
+      description: data.desciption,
+      height: parseFloat(data.height),
+      width: parseFloat(data.width),
+      length: parseFloat(data.length),
+      weight: parseFloat(data.weight),
+    };
+    createProduct(product)
+      .then((response) => {
+        toast({
+          title: "Product created successfully",
+          description: `The product ${data.productName} has been created successfully.`,
+        });
+        form.reset();
+        window.location.reload();
+      })
+      .catch((error) => {
+        toast({
+          title: "Error",
+          description: "An error occurred while creating the product.",
+        });
+      })
+      .finally(() => {
+        setIsSending(false);
+      });
   }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -160,17 +200,22 @@ export function CreateProduct() {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Provider A" />
+                          <SelectValue />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="1">Provider A</SelectItem>
-                        <SelectItem value="2">Provider B</SelectItem>
-                        <SelectItem value="3">Provider C</SelectItem>
-                        <SelectItem value="4">Provider D</SelectItem>
+                        {providers &&
+                          providers.map((provider, _) => (
+                            <SelectItem
+                              key={provider.id}
+                              value={provider.id.toString()}
+                            >
+                              {provider.name}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
-                    <FormMessage className="text-secondary" />
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -261,7 +306,15 @@ export function CreateProduct() {
                   Close
                 </Button>
               </DialogClose>
-              <Button type="submit">Create product</Button>
+              <Button
+                disabled={isSending}
+                className={`${
+                  isSending ? "cursor-not-allowed bg-opacity-70" : ""
+                }`}
+                type="submit"
+              >
+                {isSending ? "Creating product..." : "Create product"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>
