@@ -25,6 +25,9 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 import { Product } from "@typings/entities";
+import createOutboundRequest from "@api/createOutboundRequest";
+import { toast } from "@components/ui/use-toast";
+import { title } from "process";
 
 const numbersRegEx = /^[0-9]*$/;
 
@@ -35,6 +38,7 @@ const FormSchema = z.object({
 });
 
 const OutboundForm = ({ product }: { product: Product }) => {
+  const [isSending, setIsSending] = React.useState<boolean>(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -43,7 +47,28 @@ const OutboundForm = ({ product }: { product: Product }) => {
   });
 
   const onSubmit = (values: z.infer<typeof FormSchema>) => {
-    console.log(values);
+    setIsSending(true);
+    createOutboundRequest({
+      productId: product.id.toString(),
+      quantity: parseInt(values.quantity),
+    })
+      .then(() => {
+        toast({
+          title: "Outbound request created",
+          description: "The outbound request was successfully created",
+        });
+        form.reset();
+        window.location.reload();
+      })
+      .catch((error) => {
+        toast({
+          title: "Failed to create outbound request",
+          description: error.message,
+        });
+      })
+      .finally(() => {
+        setIsSending(false);
+      });
   };
 
   return (
@@ -62,7 +87,7 @@ const OutboundForm = ({ product }: { product: Product }) => {
           <DialogTitle>Create Outbound request</DialogTitle>
           <DialogDescription>
             Here you can create a new outbound request for{" "}
-            <span className="font-bold">{product.productName} </span>
+            <span className="font-bold">{product.name} </span>
             filling in the form below the quantity to be retrieved.
           </DialogDescription>
         </DialogHeader>
@@ -93,8 +118,14 @@ const OutboundForm = ({ product }: { product: Product }) => {
                   Close
                 </Button>
               </DialogClose>
-              <Button type="submit" variant="secondary">
-                Create Outbound
+              <Button
+                disabled={isSending}
+                className={`
+              ${isSending ? "animate-pulse" : ""}`}
+                type="submit"
+                variant="secondary"
+              >
+                {isSending ? "Creating..." : "Create Outbound request"}
               </Button>
             </DialogFooter>
           </form>

@@ -56,7 +56,7 @@ const Navbar = () => {
       {(showDiv || open) && (
         <nav
           className={`fixed  ${
-            prevScrollPos > 10 || open ? "" : "bg-transparent"
+            prevScrollPos > 10 || open ? "bg-background" : "bg-transparent"
           } z-50 w-full transition-all shadow-sm   duration-300  top-0`}
         >
           <div
@@ -64,7 +64,7 @@ const Navbar = () => {
           >
             <Link className={`w-[15%] text-4xl flex items-center   `} href="/">
               <p className={cn("font-signature ", signature.variable)}>
-                Livrili.
+                Stockili.
               </p>
             </Link>
             <div className={`flex    items-center gap-10`}>
@@ -95,7 +95,7 @@ const Navbar = () => {
               href="/"
             >
               <p className={cn("font-signature ", signature.variable)}>
-                Livrili.
+                Stockili.
               </p>
             </Link>
             <div className={`flex  items-center gap-8`}>

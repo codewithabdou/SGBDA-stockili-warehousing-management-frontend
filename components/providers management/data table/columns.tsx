@@ -27,7 +27,7 @@ export const columns: ColumnDef<Provider>[] = [
     header: "Created At",
     cell: ({ row }) => {
       const provider = row.original;
-      return new Date(provider.createdAt).toLocaleTimeString();
+      return new Date(provider.createdAt).toLocaleString();
     },
   },
   {

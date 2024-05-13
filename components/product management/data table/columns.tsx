@@ -56,8 +56,8 @@ export const columns: ColumnDef<Product>[] = [
               Copy Product ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <SummarizedProductHistory />
-            <DetailedProductHistory />
+            <SummarizedProductHistory productId={product.id.toString()} />
+            <DetailedProductHistory productId={product.id.toString()} />
             <DropdownMenuSeparator />
             <InboundForm product={product} />
             <OutboundForm product={product} />
