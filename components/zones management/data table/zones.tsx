@@ -1,7 +1,7 @@
 import getZones from "@api/getZones";
 import { columns } from "./columns";
-import { DataTable } from "./table";
 import { Zone } from "@typings/entities";
+import { DataTable } from "@components/shared/Table/table";
 
 export default async function ZonesTable() {
   const zones: Zone[] = await getZones();

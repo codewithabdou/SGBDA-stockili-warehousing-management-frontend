@@ -12,7 +12,6 @@ async function createZone(zone: any) {
       body: JSONdata,
     });
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.log(error);

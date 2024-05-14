@@ -27,7 +27,6 @@ import { Input } from "@components/ui/input";
 import { Product } from "@typings/entities";
 import createOutboundRequest from "@api/createOutboundRequest";
 import { toast } from "@components/ui/use-toast";
-import { title } from "process";
 
 const numbersRegEx = /^[0-9]*$/;
 
@@ -52,14 +51,34 @@ const OutboundForm = ({ product }: { product: Product }) => {
       productId: product.id.toString(),
       quantity: parseInt(values.quantity),
     })
-      .then(() => {
-        toast({
-          title: "Outbound request created",
-          description: "The outbound request was successfully created",
-        });
-        form.reset();
-        window.location.reload();
-      })
+      .then(
+        (
+          response: {
+            zoneId: number;
+            quantity: number;
+          }[]
+        ) => {
+          toast({
+            title: "Outbound request created succefully",
+            description: (
+              <div>
+                <p className="font-semibold">Affected Zones :</p>
+                <ul>
+                  {response.map((zone) => (
+                    <li key={zone.zoneId}>
+                      Zone ID: {zone.zoneId} , Quantity: {zone.quantity}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ),
+          });
+          form.reset();
+          setTimeout(() => {
+            window.location.reload();
+          }, 5000);
+        }
+      )
       .catch((error) => {
         toast({
           title: "Failed to create outbound request",

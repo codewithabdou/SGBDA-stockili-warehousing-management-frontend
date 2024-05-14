@@ -28,7 +28,10 @@ const DetailedProductHistory = ({ productId }: { productId: string }) => {
     },
     out: {
       icon: (
-        <IoIosLogOut className="bg-red-400 translate-y-7 -translate-x-9 rounded-full p-1 text-red-900" />
+        <IoIosLogOut
+          size={25}
+          className="bg-red-400 translate-y-7 -translate-x-9 rounded-full p-1 text-red-900"
+        />
       ),
     },
   };

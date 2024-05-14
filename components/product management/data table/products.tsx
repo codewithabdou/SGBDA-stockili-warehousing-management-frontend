@@ -1,7 +1,7 @@
 import { Product } from "@typings/entities";
 import { columns } from "./columns";
-import { DataTable } from "./table";
 import getProducts from "@api/getProducts";
+import { DataTable } from "@components/shared/Table/table";
 
 export default async function ProductsTable() {
   const products: Product[] = await getProducts();

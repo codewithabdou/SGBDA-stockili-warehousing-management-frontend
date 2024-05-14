@@ -75,7 +75,7 @@ const Navbar = () => {
                       className={`${
                         pathname === link.href
                           ? "after:bg-foreground after:absolute after:w-full relative after:h-[2px] after:left-0 after:top-full"
-                          : "font-medium transition-all duration-300 hover:text-[#6e6e6e]"
+                          : "font-medium text-lg transition-all duration-300 hover:text-muted-foreground"
                       }`}
                     >
                       {link.name}
@@ -128,7 +128,7 @@ const Navbar = () => {
                       className={`${
                         pathname === link.href
                           ? "after:bg-foreground w-fit after:absolute after:w-full relative after:h-[2px] after:left-0 after:top-full"
-                          : "font-medium transition-all duration-300 hover:text-[#6e6e6e]"
+                          : "font-medium transition-all duration-300 hover:text-muted-foreground"
                       }`}
                     >
                       {link.name}

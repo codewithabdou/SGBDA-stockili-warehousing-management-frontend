@@ -97,7 +97,7 @@ const InboundForm = ({ product }: { product: Product }) => {
         form.reset();
         setTimeout(() => {
           window.location.reload();
-        }, 2000);
+        }, 5000);
       })
       .catch((error) => {
         toast({

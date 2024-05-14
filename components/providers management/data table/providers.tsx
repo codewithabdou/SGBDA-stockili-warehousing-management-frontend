@@ -1,7 +1,7 @@
 import getProviders from "@api/getProviders";
 import { columns } from "./columns";
-import { DataTable } from "./table";
 import { Provider } from "@typings/entities";
+import { DataTable } from "@components/shared/Table/table";
 
 export default async function ProvidersTable() {
   const providers: Provider[] = await getProviders();

@@ -14,7 +14,6 @@ async function getDetailedHistory(product: { productId: string }) {
       }
     );
     const data = await response.json();
-    console.log(data.history);
 
     return data.history;
   } catch (error) {
