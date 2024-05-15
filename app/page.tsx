@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <div>
+    <div className="lg:mt-[5%]">
       <h1 className="head_text text-center">
         Stock & Manage
         <br />

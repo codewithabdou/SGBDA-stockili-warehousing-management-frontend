@@ -82,7 +82,7 @@ const OutboundForm = ({ product }: { product: Product }) => {
       .catch((error) => {
         toast({
           title: "Failed to create outbound request",
-          description: error.message,
+          description: "An error occurred while creating the outbound request",
         });
       })
       .finally(() => {

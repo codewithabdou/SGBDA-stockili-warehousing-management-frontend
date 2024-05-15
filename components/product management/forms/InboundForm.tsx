@@ -86,7 +86,7 @@ const InboundForm = ({ product }: { product: Product }) => {
     createInboundRequest(inboundRequest)
       .then((data) => {
         toast({
-          title: "Inbound request created",
+          title: `${values.processedIn} Inbound request created succefully`,
           description: `Inbound request for ${
             product.name
           } has been created successfully in ${(
